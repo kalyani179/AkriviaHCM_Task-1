@@ -1,26 +1,45 @@
-import { CommonModule, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule,NgIf,CommonModule], // Import FormsModule for ngModel (template-driven form)
+  imports: [FormsModule, CommonModule], 
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  model: any = {};
 
-  model: any = {}; // Initialize model (e.g., empty object)
+  username: string = '';
+  email: string = '';
+  password: string = '';
+
+  constructor(private http: HttpClient) {}
 
   onSubmit(form: NgForm) {
-    console.log(form);  // Log form state for debugging
     if (form.invalid) {
-        console.log('Form is invalid');
-        form.control.markAllAsTouched();
-        return;
+      console.log('Form is invalid');
+      form.control.markAllAsTouched();
+      return;
     }
-    console.log('Form is valid');
-  }
 
+    const userData = form.value;  // Get form data
+
+    console.log(userData); 
+
+    this.http.post('http://localhost:3000/register', userData)
+      .subscribe({
+        next: (response) => {
+          console.log('Registration successful:', response);
+          alert('Registration successful');
+        },
+        error: (err) => {
+          console.error('Error during registration:', err);
+          alert('Registration failed');
+        }
+      });
+  }
 }
