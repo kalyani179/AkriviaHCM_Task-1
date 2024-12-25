@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
 @Component({
@@ -10,12 +10,14 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  model: any = {};
+  
   email: string = '';
   password: string = '';
 
   constructor(private http: HttpClient) {}
 
-  onSubmit(form: any) {
+  onSubmit(form: NgForm) {
     if (form.invalid) {
       console.log('Form is invalid');
       return;
@@ -28,8 +30,7 @@ export class LoginComponent {
       .subscribe({
         next: (response: any) => {
           console.log('Login successful:', response);
-          // Store the JWT token in localStorage
-          localStorage.setItem('authToken', response.token);
+          alert('Login successful');
         },
         error: (err) => {
           console.error('Error during login:', err);
