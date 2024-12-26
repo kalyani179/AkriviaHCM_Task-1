@@ -2,8 +2,8 @@
     <h1 class="heading">User Login</h1>
     <form
         class="flex flex-col border border-black p-10 py-7 rounded space-y-5 w-96"
-        #registerForm="ngForm"
-        (ngSubmit)="onSubmit(registerForm)"
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
     >
         <div class="label-input">
             <label for="email">Email</label>
@@ -11,8 +11,7 @@
                 type="email"
                 id="email"
                 name="email"
-                #email="ngModel"
-                [(ngModel)]="model.email"
+                formControlName="email"
                 email
                 required
             />
@@ -28,9 +27,7 @@
                 type="password"
                 id="password"
                 name="password"
-                #password="ngModel"
-                [(ngModel)]="model.password"
-                pattern="^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z]).{6,}$"
+                formControlName="password"
                 required
             />
             <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error">

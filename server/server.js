@@ -9,7 +9,7 @@ const cors = require('cors');
 const server = express();
 const PORT = 3000;
 
-const JWT_SECRET = 'your_jwt_secret_key';
+const JWT_SECRET = 'kalyani@179';
 
 // Middlewares
 server.use(cors());

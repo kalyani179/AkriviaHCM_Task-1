@@ -1,32 +1,52 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule], 
+  imports: [ReactiveFormsModule, CommonModule], 
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  model: any = {};
-
-  username: string = '';
-  email: string = '';
-  password: string = '';
 
   constructor(private http: HttpClient) {}
 
-  onSubmit(form: NgForm) {
-    if (form.invalid) {
+  registerForm: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.pattern(
+        '(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}' // Pattern for strong password
+      ),
+    ]),
+  });
+
+  // Getters for form controls
+  get username(): FormControl {
+    return this.registerForm.get('username') as FormControl; // Corrected from 'firstname' to 'username'
+  }
+
+  get email(): FormControl {
+    return this.registerForm.get('email') as FormControl;
+  }
+  
+  get password(): FormControl {
+    return this.registerForm.get('password') as FormControl;
+  }
+
+  onSubmit() {
+    if (this.registerForm.invalid) {
       console.log('Form is invalid');
-      form.control.markAllAsTouched();
+      this.registerForm.markAllAsTouched();
       return;
     }
 
-    const userData = form.value;  // Get form data
+    const userData = this.registerForm.value;  
 
     console.log(userData); 
 
