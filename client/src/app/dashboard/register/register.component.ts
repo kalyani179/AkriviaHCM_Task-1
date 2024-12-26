@@ -26,9 +26,8 @@ export class RegisterComponent {
     ]),
   });
 
-  // Getters for form controls
   get username(): FormControl {
-    return this.registerForm.get('username') as FormControl; // Corrected from 'firstname' to 'username'
+    return this.registerForm.get('username') as FormControl; 
   }
 
   get email(): FormControl {
@@ -51,15 +50,24 @@ export class RegisterComponent {
     console.log(userData); 
 
     this.http.post('http://localhost:3000/register', userData)
-      .subscribe({
-        next: (response) => {
-          console.log('Registration successful:', response);
+    .subscribe({
+      next: (response: any) => {
+        console.log('Registration successful:', response);
+        if (response.message) {
+          alert(response.message);
+        } else {
           alert('Registration successful');
-        },
-        error: (err) => {
-          console.error('Error during registration:', err);
+        }
+      },
+      error: (err) => {
+        console.error('Error during registration:', err);
+        if (err.error.message) {
+          alert(err.error.message);
+        } else {
           alert('Registration failed');
         }
-      });
+      }
+    });
+
   }
 }

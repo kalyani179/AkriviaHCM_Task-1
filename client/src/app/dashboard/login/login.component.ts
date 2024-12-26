@@ -37,18 +37,26 @@ export class LoginComponent {
       return;
     }
   
-    const loginData = this.loginForm.value;  // Get form data
+    const loginData = this.loginForm.value; 
     console.log('Login data:', loginData);
 
     this.http.post('http://localhost:3000/login', loginData)
       .subscribe({
         next: (response: any) => {
           console.log('Login successful:', response);
-          alert('Login successful');
+          if (response.message) {
+            alert(response.message);
+          } else {
+            alert('Login successful');
+          }
         },
         error: (err) => {
-          console.error('Error during login:', err);
-          alert('Invalid email or password');
+          console.error('Error during Login:', err);
+          if (err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('Login failed');
+          }
         }
       });
   }
